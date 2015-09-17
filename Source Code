@@ -5,14 +5,15 @@ using namespace std;
 
 //Declaracion de variables
 bool cond_menu=false;
-bool cond_minas;
-bool cond_juego=false;
+bool cond_minas=false;
+int cond_juego,*p_juego=&cond_juego;
 int num_minas=5,*p_nmin=&num_minas;
 int tablero=10,*p_tab=&tablero;
 int coor_x=0,coor_y=0;
-int matriz[10][10];
+int matriz[10][10],mat_mostrar[10][10];
 
-bool func() {         // Func devuelve un tipo bool
+//Func devuelve un tipo bool
+bool func() {         
 	if (cond_juego==true)
 		return true;
 	else
@@ -20,10 +21,14 @@ bool func() {         // Func devuelve un tipo bool
 		/* NULL es convertido a Booleano (false)
 	return false;      esta sentencia es idéntica a la anterior */
 }
+
+//crear matriz 
 void crear_matriz(int tamanho){
 	matriz[1][1]=matriz[tamanho][tamanho];
-	cout<<matriz[6][6];
+	mat_mostrar[1][1]=mat_mostrar[tamanho][tamanho];
 }
+
+//minas
 void llenar_minas(int tamanho,int contador){
 	srand(time(NULL));
 	for(int i=0;i<tamanho;i++){
@@ -34,9 +39,23 @@ void llenar_minas(int tamanho,int contador){
 					--contador;
 				}
 			}
+			//Funcion parasita de mostrar_tablero
+			mat_mostrar[i][j]=8;
 		}
 
 	}
+}
+//para mostrar
+void mostrar_tablero(){
+	for(int i=0;i<10;i++){
+		for(int j=0;j<10;j++){
+			cout<<mat_mostrar[i][j]<<"  ";
+		}
+		cout<<"\n";
+	}
+}
+void mostrar_posicion(int mov_x,int mov_y){
+	mat_mostrar[mov_x][mov_y]=matriz[mov_x][mov_y];
 }
 void imprimir_matriz(){
 	for(int i=0;i<10;i++){
@@ -47,11 +66,35 @@ void imprimir_matriz(){
 	}
 	
 }
+bool evaluar_posicion(int mov_x,int mov_y){
+	if (mov_x<0 or mov_x>10 or mov_y<0 or mov_y>10){
+		
+		cout<<"\n¡¡Movimiento fuera de rango intente de nuevo!!\n";
+		return false;
+	}
+	if (matriz[mov_x][mov_y]==1){
+		cout<<"\n¡¡¡¡¡¡¡¡¡¡¡¡PERDIO!!!!!!!!!!!!!\n";
+		return true;
+	}
+	else{
+		mostrar_posicion(mov_x,mov_y);
+		mostrar_tablero();
+		return false;
+	}
+}
+int main_1(){
+	cout<<"\nDificultad\n";
+	cout<<"\nPrincipiante(1):"<<"  9x9 -10 minas\n";
+	cout<<"\n Intermedio (2):"<<" 16x16-40 minas\n";
+	cout<<"\n  Avanzado  (3):"<<" 23x23-99 minas\n";
+	cin<<*p_juego=&cond_juego;
+}
 int main() {
 	
-	//Declaracion del menu_1
 	cout<<"Bienvenido al juego\n";
-	cout<<"Ingrese el tipo de tablero que desa jugar:\n";
+	//Dificultad
+	cout<<"Eliga el numero de Dificultad que desea:\n";
+	main_1();
 	cin>>*p_tab;
 	cout<<"Ingrese el numero de minas que desea:\n";
 	cin>>*p_nmin;
@@ -67,13 +110,18 @@ int main() {
 	
 	//Inicio de bucle de jugadas	
 	while(cond_menu==false){
-		cout<<"Ejecute su movimiento:\n";
+		cout<<"\nEjecute su movimiento:\n";
 		
 		cout<<"Ingrese la coordenada en x:\n\a";
 		cin>>coor_x;
 		
 		cout<<"Ingres la coordenada en y:\n\a";
 		cin>>coor_y;
+		cout<<"\n";
+		
+		if (evaluar_posicion(coor_x,coor_y)==true)
+			cond_menu=true;
+		
 		
 	}
 	
@@ -81,3 +129,4 @@ int main() {
 	
 	return 0;
 }
+
