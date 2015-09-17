@@ -1,0 +1,176 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+
+//Declaracion de variables
+bool cond_menu=false;
+bool cond_minas=false;
+int cond_juego,*p_juego=&cond_juego;
+int num_minas=5,*p_nmin=&num_minas;
+int tablero=10,*p_tab=&tablero;
+int coor_x=0,coor_y=0;
+int matriz[2][2],*p_matriz=&matriz[0][0];
+int	mat_mostrar[2][2],*p_mostrar=&mat_mostrar[0][0];
+//Estructura de dificultad
+struct dificultad{
+	int minas;
+	int tablero;
+	int matriz[10][10];
+	int mat_mostrar[10][10];
+};
+struct dificultad Principiante,*p_prin=&Principiante;
+struct dificultad Intermedio,*p_inter=&Intermedio;
+struct dificultad Avanzado,*p_avan=&Avanzado;
+
+void declaracion_struct(){
+	//dificultad 1
+	p_prin->minas=10;
+	p_prin->tablero=10;
+	//dificultad 2
+	p_inter->minas=40;
+	p_inter->tablero=16;
+	//dificultad 3
+	p_avan->minas=90;
+	p_avan->tablero=23;
+}
+
+//crear matriz 
+void crear_matriz(int tamanho){
+	
+}
+
+//minas
+void llenar_minas(int tamanho,int contador){
+	srand(time(NULL));
+	for(int k=0;k<tamanho;k++){
+		for(int l=0;l<tamanho;l++){
+			matriz[k][l]=0;
+		}
+	}
+	for(int i=0;i<tamanho;i++){
+		for(int j=0;j<tamanho;j++){
+			if (contador!=0){
+				if (rand() %tamanho==1){
+					matriz[i][j]=1;
+					--contador;
+				}
+			}
+			
+			
+		}
+
+	}
+}
+//para mostrar
+void mostrar_tablero(){
+	for (int h=0;h<tablero;h++){
+		for (int k=0;k<tablero;k++){
+			mat_mostrar[h][k]=8;
+		}
+	}
+	for(int i=0;i<tablero;i++){
+		for(int j=0;j<tablero;j++){
+			cout<<mat_mostrar[i][j]<<"  ";
+		}
+		cout<<"\n";
+	}
+}
+void mostrar_posicion(int mov_x,int mov_y){
+	int *p_mota=&mat_mostrar[mov_x][mov_y];
+	*p_mota=matriz[mov_x][mov_y];
+}
+void imprimir_matriz(){
+	for(int i=0;i<tablero;i++){
+		for(int j=0;j<tablero;j++){
+			cout<<matriz[i][j]<<"  ";
+		}
+		cout<<"\n";
+	}
+	
+}
+bool evaluar_posicion(int mov_x,int mov_y){
+	if (mov_x<0 or mov_y<0 or mov_x>tablero or mov_y>tablero){
+		cout<<"\n¡¡Movimiento fuera de rango intente de nuevo!!\n";
+		return false;
+	}
+	if (matriz[mov_x][mov_y]==1){
+		cout<<"\n¡¡¡¡¡¡¡¡¡¡¡¡PERDIO!!!!!!!!!!!!!\n";
+		imprimir_matriz();
+		return true;
+	}
+	else{
+		mostrar_posicion(mov_x,mov_y);
+		cout<<"\n";
+		return false;
+	}
+}
+void main_1(){
+	cout<<"\nDificultad\n";
+	cout<<"\nPrincipiante(1):"<<"  9x9  - 10 minas\n";
+	cout<<"\n Intermedio (2):"<<" 16x16 - 40 minas\n";
+	cout<<"\n  Avanzado  (3):"<<" 23x23 - 99 minas\n";
+	cin>>*p_juego;
+
+	if (cond_juego==1){
+		declaracion_struct();
+			*p_matriz=p_prin->matriz[10][10];
+			*p_mostrar=p_prin->mat_mostrar[10][10];
+			*p_tab=p_prin->tablero;
+			*p_nmin=p_prin->minas;
+	}
+	if (cond_juego==2){
+		declaracion_struct();
+		*p_matriz=p_inter->matriz[16][16];
+		*p_mostrar=p_inter->mat_mostrar[16][16];
+		*p_tab=p_inter->tablero;
+		*p_nmin=p_inter->minas;
+	}
+	if (cond_juego==3){
+		declaracion_struct();
+		*p_matriz=p_avan->matriz[23][23];
+		*p_mostrar=p_avan->mat_mostrar[23][23];
+		*p_tab=p_avan->tablero;
+		*p_nmin=p_avan->minas;
+	}
+}
+
+
+int main() {
+	
+	cout<<"Bienvenido al juego\n";
+	//Dificultad
+	cout<<"Eliga el numero de Dificultad que desea:\n";
+	main_1();
+	
+	//Fin de la declaracion del menu_1
+	
+	//Funciones de creacion
+	crear_matriz(tablero);
+	llenar_minas(tablero,num_minas);
+	
+	
+	
+	
+	//Inicio de bucle de jugadas	
+	while(cond_menu==false){
+		cout<<"\nEjecute su movimiento:\n";
+		
+		cout<<"Ingrese la coordenada en x:\n\a";
+		cin>>coor_x;
+		
+		cout<<"Ingres la coordenada en y:\n\a";
+		cin>>coor_y;
+		cout<<"\n";
+		
+		if (evaluar_posicion(coor_x,coor_y)==true)
+			cond_menu=true;
+		mostrar_tablero();
+		cout<<"\n";
+		imprimir_matriz();
+	}
+	
+	
+	
+	return 0;
+}
