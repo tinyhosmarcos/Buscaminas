@@ -1,0 +1,83 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+using namespace std;
+
+//Declaracion de variables
+bool cond_menu=false;
+bool cond_minas;
+bool cond_juego=false;
+int num_minas=5,*p_nmin=&num_minas;
+int tablero=10,*p_tab=&tablero;
+int coor_x=0,coor_y=0;
+int matriz[10][10];
+
+bool func() {         // Func devuelve un tipo bool
+	if (cond_juego==true)
+		return true;
+	else
+		return true;
+		/* NULL es convertido a Booleano (false)
+	return false;      esta sentencia es idéntica a la anterior */
+}
+void crear_matriz(int tamanho){
+	matriz[1][1]=matriz[tamanho][tamanho];
+	cout<<matriz[6][6];
+}
+void llenar_minas(int tamanho,int contador){
+	srand(time(NULL));
+	for(int i=0;i<tamanho;i++){
+		for(int j=0;j<tamanho;j++){
+			if (contador!=0){
+				if (rand() %tamanho==1){
+					matriz[i][j]=1;
+					--contador;
+				}
+			}
+		}
+
+	}
+}
+void imprimir_matriz(){
+	for(int i=0;i<10;i++){
+		for(int j=0;j<10;j++){
+			cout<<matriz[i][j]<<"  ";
+		}
+		cout<<"\n";
+	}
+	
+}
+int main() {
+	
+	//Declaracion del menu_1
+	cout<<"Bienvenido al juego\n";
+	cout<<"Ingrese el tipo de tablero que desa jugar:\n";
+	cin>>*p_tab;
+	cout<<"Ingrese el numero de minas que desea:\n";
+	cin>>*p_nmin;
+	
+	//Fin de la declaracion del menu_1
+	
+	//Funciones de creacion
+	crear_matriz(tablero);
+	llenar_minas(tablero,num_minas);
+	imprimir_matriz();
+	
+	
+	
+	//Inicio de bucle de jugadas	
+	while(cond_menu==false){
+		cout<<"Ejecute su movimiento:\n";
+		
+		cout<<"Ingrese la coordenada en x:\n\a";
+		cin>>coor_x;
+		
+		cout<<"Ingres la coordenada en y:\n\a";
+		cin>>coor_y;
+		
+	}
+	
+	
+	
+	return 0;
+}
